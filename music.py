@@ -47,24 +47,28 @@ def display_information(search_results):
 			None
 	"""
 	ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
+	video_titles = []
 	for i in range(0, len(search_results)):
-		with ydl:
-			result = ydl.extract_info(
-				search_results[i],
-				download=False # We just want to extract the info
-			)
-		if 'entries' in result:
-		    # Can be a playlist or a list of videos
-		    video = result['entries'][0]
-		else:
-		    # Just a video
-		    video = result
-
-		# print(video)
-		print(video['title'])
-		# video_url = video['webpage_url']
-		# print(video_url)	
-
+		try:
+			with ydl:
+				result = ydl.extract_info(
+					search_results[i],
+					download=False # We just want to extract the info
+				)
+			if 'entries' in result:
+			    # Can be a playlist or a list of videos
+			    video = result['entries'][0]
+			else:
+			    # Just a video
+			    video = result				
+			# print(video)
+			video_titles.append(video['title'])
+			# video_url = video['webpage_url']
+			# print(video_url)	
+		except Exception as e:
+			continue
+	for i in range(0, len(video_titles)):
+		print(str(i+1) + " -> " + video_titles[i])
 
 def query_and_download():
 	"""
