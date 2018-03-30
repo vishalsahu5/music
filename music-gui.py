@@ -77,7 +77,7 @@ def display_information(search_results):
     """
     ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
     video_titles = []
-    for i in range(0, min(len(search_results),10)):
+    for i in range(0, min(len(search_results),5)):
         try:
             with ydl:
                 result = ydl.extract_info(
@@ -122,7 +122,6 @@ def query_and_download(text):
 
 
 class filterit:
-    global quality
     value_of_combo = '192'
 
 
@@ -131,6 +130,7 @@ class filterit:
         self.combo()
 
     def newselection(self, event):
+        global quality
         self.value_of_combo = self.box.get()
         quality = self.value_of_combo
 
@@ -201,10 +201,10 @@ def add_placeholder_to(entry, placeholder, color="grey", font=None):
     return state
 
 class SearchBox(Frame):
-        """
-            This class is  search box changes colour when we write and other 
-            functionality to look like a search box
-        """
+    """
+        This class is  search box changes colour when we write and other 
+        functionality to look like a search box
+    """
     def __init__(self, master, entry_width=30, entry_font=None, entry_background="white", entry_highlightthickness=1, button_text="Search", button_ipadx=10, button_background="#009688", button_foreground="white", button_font=None, opacity=0.8, placeholder=None, placeholder_font=None, placeholder_color="grey", spacing=3, command=None):
         Frame.__init__(self, master)
         
@@ -327,10 +327,20 @@ if __name__ == "__main__":
         query_and_download(text)
         showinfo("search command", "searching:%s"%text)
     SearchBox(root, command=command, placeholder="Type and press enter", entry_highlightthickness=0).pack(pady=6, padx=3)
+    label = Label(root, text="Select Quality")
+    label.pack()
+
     Filterit = filterit(root)
+    
     listbox = Listbox(root, width=50, height=600)
     listbox.pack(side="right", padx=5)
+    
     Downloadbutton = Button(root, text='Download')
     Downloadbutton.pack()
     Downloadbutton.bind("<Button-1>", Downloadit)
+    
     root.mainloop()
+
+
+
+
