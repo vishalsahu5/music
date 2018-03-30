@@ -14,11 +14,12 @@ import sys
 import urllib.request
 import urllib.parse
 import re
+quality="192"
 
 search_results = []
 class filterit:
-
-    value_of_combo = 'Songs'
+    global quality
+    value_of_combo = '192'
 
 
     def __init__(self, parent):
@@ -27,13 +28,13 @@ class filterit:
 
     def newselection(self, event):
         self.value_of_combo = self.box.get()
-        print(self.value_of_combo)
+        quality = self.value_of_combo
 
 
     def combo(self):
         self.box_value = StringVar()
         self.box = ttk.Combobox(self.parent, textvariable=self.box_value)
-        self.box['values'] = ('Songs', 'Artist', 'Genre')
+        self.box['values'] = ('192', '256', '320')
         self.box.bind("<<ComboboxSelected>>", self.newselection)
         self.box.current(0)
         self.box.pack()
@@ -298,7 +299,7 @@ def Downloadit(event):
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-            'preferredquality': '320',
+            'preferredquality':quality,
         }],
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
