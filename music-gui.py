@@ -325,7 +325,6 @@ if __name__ == "__main__":
     v = StringVar()
     def command(text):
         query_and_download(text)
-        showinfo("search command", "searching:%s"%text)
     SearchBox(root, command=command, placeholder="Type and press enter", entry_highlightthickness=0).pack(pady=6, padx=3)
     label = Label(root, text="Select Quality")
     label.pack()
