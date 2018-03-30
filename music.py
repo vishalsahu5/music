@@ -4,6 +4,8 @@ import sys
 import urllib.request
 import urllib.parse
 import re
+from bs4 import BeautifulSoup
+
 
 def print_all_links(search_results):
 	"""
@@ -48,7 +50,8 @@ def display_information(search_results):
 	"""
 	ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
 	video_titles = []
-	for i in range(0, len(search_results)):
+	# len(search_results)
+	for i in range(0, min(len(search_results), 10)):
 		try:
 			with ydl:
 				result = ydl.extract_info(
@@ -70,6 +73,7 @@ def display_information(search_results):
 	for i in range(0, len(video_titles)):
 		print(str(i+1) + " -> " + video_titles[i])
 
+
 def query_and_download():
 	"""
 		@param
@@ -85,9 +89,24 @@ def query_and_download():
 	# print_all_links(search_results)
 
 	num = input("which one would you like to download ? : ").strip()
-	
 	print("{} results found. Downloading song number {}.".format(len(search_results), int(num)))
-	ydl_opts = {'preferredcodec':'mp3'}
+
+	# url = urllib.request.urlopen("https://youtubemp3api.com/@api/button/mp3/cH4E_t3m3xM")
+	# content = url.read()
+	# soup = BeautifulSoup(content, "html.parser")
+	# print(soup)
+	# for a in soup.findAll('a',href=re.compile('http.*\.mp3')):
+	# 	print ("URL:", a['href'])
+
+	ydl_opts = {
+	    'format': 'bestaudio/best',
+	    'postprocessors': [{
+	        'key': 'FFmpegExtractAudio',
+	        'preferredcodec': 'mp3',
+	        'preferredquality': '192',
+	    }],
+	}
+
 	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 		link = []
 		link.append(search_results[int(num)-1])
@@ -98,7 +117,6 @@ def main():
 	"""
 	 The main program
 	"""
-
 	query_and_download()
 
 
