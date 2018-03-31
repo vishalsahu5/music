@@ -4,6 +4,9 @@
 
 from __future__ import unicode_literals
 import os
+from bs4 import BeautifulSoup as bs
+import requests
+
 
 try:
     from Tkinter import Entry, Frame, Label, StringVar
@@ -315,6 +318,29 @@ def Downloadit(event):
 
     return index
 
+def  similarsong(event):
+    global search_results
+    global quality
+    index = listbox.get(0, "end").index(listbox.get('active'))
+    print(index)
+    youtube_string = "http://www.youtube.com"
+    link = []
+    link.append(search_results[int(index)])
+    print(link)
+    r = requests.get(link[0])
+    page = r.text
+    soup = bs(page, 'html.parser')
+    res = soup.find_all('a', {'class': "content-link"})
+    search_results.clear()
+    listbox.delete(0, END)
+    for l in res:
+        p = l.get("href")
+        if p.startswith('/watch'):
+            search_results.append(youtube_string + p)
+
+    video_titles = display_information(search_results)
+    show_titles(video_titles)
+
 
 if __name__ == "__main__":
     from  tkinter.messagebox import showinfo
@@ -334,9 +360,18 @@ if __name__ == "__main__":
     listbox = Listbox(root, width=50, height=600)
     listbox.pack(side="right", padx=5)
     
-    Downloadbutton = Button(root, text='Download')
+    Downloadbutton = Button(root, text='Download',height=1, width=10)
     Downloadbutton.pack()
     Downloadbutton.bind("<Button-1>", Downloadit)
+    Downloadbutton = Button(root, text='Similar songs', height=1, width=10)
+    Downloadbutton.pack()
+    Downloadbutton.bind("<Button-1>",similarsong)
+    Downloadbutton = Button(root, text='Latest Hindi', height=1, width=10)
+    Downloadbutton.pack()
+    # Downloadbutton.bind("<Button-1>", latesthindi)
+    # Downloadbutton = Button(root, text='Latest English',height=1, width=10)
+    # Downloadbutton.pack()
+    # Downloadbutton.bind("<Button-1>", latestenglish)
     
     root.mainloop()
 
