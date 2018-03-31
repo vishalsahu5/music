@@ -364,7 +364,7 @@ if __name__ == "__main__":
     from tkinter import *
     from tkinter.filedialog import askdirectory
     root = Tk()
-    root.minsize(600,600)
+    root.minsize(700,700)
     v = StringVar()
     def command(text):
         query_and_download(text)
@@ -374,7 +374,7 @@ if __name__ == "__main__":
 
     Filterit = filterit(root)
     
-    listbox = Listbox(root, width=50, height=600)
+    listbox = Listbox(root, width=90, height=600)
     listbox.pack(side="right", padx=5)
     
     Downloadbutton = Button(root, text='Download',height=1, width=10)
